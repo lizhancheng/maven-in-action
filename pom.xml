@@ -3,4 +3,10 @@
   <groupId>com.app</groupId>
   <artifactId>maven-in-action</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>jakarta.mail</groupId>
+  		<artifactId>jakarta.mail-api</artifactId>
+  	</dependency>
+  </dependencies>
 </project>
