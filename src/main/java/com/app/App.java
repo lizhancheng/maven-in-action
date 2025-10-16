@@ -26,24 +26,35 @@ public class App {
     sendMail();
   }
 
-  private String host = "smtp.qq.com";
-  private String port = "587";
+  private String host = "smtp.139.com";
+  private String port = "465";
   private String username;
   private String password;
 
   private Properties props = new Properties();
   private Authenticator auth;
 
-  private String receiver = "c638kersdc@wyoxafp.com";
+  private String receiver;
   private String subject = "测试邮件";
   private String content = "这是一封使用Java发送的测试邮件";
 
   public void inputAccount() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("请输入账号：");
+    System.out.println("请输入中国移动账号：");
     username = scanner.nextLine();
-    System.out.println("请输入密码：");
+    
+    System.out.println("请输入授权码码：");
     password = scanner.nextLine();
+    
+    System.out.println("请填写收件人地址：");
+    receiver = scanner.nextLine();
+    
+    System.out.println("请填写发送主题：");
+    subject = scanner.nextLine();
+    
+    System.out.println("请填写发送内容");
+    content = scanner.nextLine();
+    
     scanner.close();
   }
 
@@ -52,7 +63,8 @@ public class App {
     props.put("mail.smtp.host", host);
     props.put("mail.smtp.port", port);
     props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.ssl.enable", "true");
+    props.put("mail.smtl.ssl.trust", host);
   }
 
   // 认证器
