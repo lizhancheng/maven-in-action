@@ -52,6 +52,8 @@ public class Receiver {
 			store.connect(username, password);
 			
 			openInbox();
+			
+			scanner.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
