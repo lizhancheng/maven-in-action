@@ -1,6 +1,7 @@
 package com.app.document;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,15 +18,19 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.fasterxml.jackson.dataformat.xml.JacksonXmlModule;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 public class DomParser {
 	public static void main(String[] args) throws Exception {
-		// new DOM();
-		new SAX();
+		// new Dom();
+		// new Sax();
+		new Jackson();
 	}
 }
 
-class DOM {
-	public DOM() {
+class Dom {
+	public Dom() {
 		executeParse();
 	}
 	
@@ -79,8 +84,8 @@ class DOM {
 
 // 基于流的解析方式，边读取XML边解析，并以事件回调方式让调用者获取数据
 // 因可一边读一边解析，所以不管XML多大，占用的内存都很小
-class SAX {
-	public SAX() {
+class Sax {
+	public Sax() {
 		executeParse();
 	}
 
@@ -126,5 +131,38 @@ class SAX {
 			print("end document");
 		}
 		
+	}
+}
+
+class Book {
+	public long id;
+	public String name;
+	public String author;
+	public String isbn;
+	public List<String> tags;
+	public String pubDate;
+}
+
+class Jackson {
+	public Jackson() {
+		executeParse();
+	}
+	
+	public void executeParse() {
+		InputStream inputStream = DomParser.class.getResourceAsStream("/book.xml");
+		JacksonXmlModule jacksonXmlModule = new JacksonXmlModule();
+		XmlMapper xmlMapper = new XmlMapper(jacksonXmlModule);
+		
+		try {
+			Book book = xmlMapper.readValue(inputStream, Book.class);
+			System.out.println("id: " + book.id);
+			System.out.println("name: " + book.name);
+			System.out.println("author: " + book.author);
+			System.out.println("isbn: " + book.isbn);
+			System.out.println("tags: " + book.tags);
+			System.out.println("pubDate: " + book.pubDate);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 }
