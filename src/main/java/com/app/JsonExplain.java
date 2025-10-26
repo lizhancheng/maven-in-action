@@ -14,8 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import kotlin.jvm.Throws;
-
 
 public class JsonExplain {
 	public static void main(String[] args) {
@@ -88,7 +86,7 @@ class User {
 		setIsbn(isbn);
 	}
 	
-	long getId() {
+	public long getId() {
 		return id;
 	}
 	
@@ -96,7 +94,7 @@ class User {
 		this.id = id;
 	}
 	
-	String getName() {
+	public String getName() {
 		return name;
 	}
 	
@@ -104,7 +102,7 @@ class User {
 		this.name = name;
 	}
 	
-	int getAge() {
+	public int getAge() {
 		return age;
 	}
 	
@@ -112,7 +110,7 @@ class User {
 		this.age = age;
 	}
 	
-	List<String> getHobbies() {
+	public List<String> getHobbies() {
 		return hobbies;
 	}
 	
@@ -120,7 +118,7 @@ class User {
 		this.hobbies = hobbies;
 	}
 	
-	Address getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 	
@@ -128,7 +126,7 @@ class User {
 		this.address = address;
 	}
 	
-	BigInteger getIsbn() {
+	public BigInteger getIsbn() {
 		return isbn;
 	}
 	
@@ -146,7 +144,7 @@ class Address {
 	String city;
 	String street;
 	
-	String getCity() {
+	public String getCity() {
 		return city;
 	}
 	
@@ -154,7 +152,7 @@ class Address {
 		this.city = city;
 	}
 	
-	String getStreet() {
+	public String getStreet() {
 		return street;
 	}
 	
