@@ -18,17 +18,19 @@ public class Jdbc {
 	static String JDBC_USER = "root";
 	static String jDBC_PASSWORD = "123456";
 	static String getAllUsersSql = "SELECT id, address, age, name FROM user;";
-	static String getConghuaUser = "SELECT * FROM user WHERE address = ?";
-	static String createUser = "INSERT INTO user (name, first_name, last_name, age, occupation, address, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
-	static String updateUser = "UPDATE user SET age=?, address=?, occupation=? WHERE id=?";
+	static String getConghuaUserSql = "SELECT * FROM user WHERE address = ?";
+	static String createUserSql = "INSERT INTO user (name, first_name, last_name, age, occupation, address, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	static String updateUserSql = "UPDATE user SET age=?, address=?, occupation=? WHERE id=?";
+	static String deleteUserSql = "DELETE FROM user WHERE id=?";
 	
 	public static void connectDatabase() {
 		try (Connection innerConnection = DriverManager.getConnection(JDBC_URL, JDBC_USER, jDBC_PASSWORD)) {
 			connection = innerConnection;
 			// getAllUsers();
 			// getSpecificUser();
-			// insertRandomData();
-			updateUserInfo();
+			// insertUser();
+			// updateUser();
+			deleteUser();
 		} catch (SQLException exp) {
 			exp.printStackTrace();
 		}
@@ -51,7 +53,7 @@ public class Jdbc {
 	}
 	
 	public static void getSpecificUser() {
-		try (PreparedStatement preparedStatement = connection.prepareStatement(getConghuaUser)) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(getConghuaUserSql)) {
 			preparedStatement.setObject(1, "conghua");
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				while (resultSet.next()) {
@@ -94,7 +96,20 @@ public class Jdbc {
 		return (int) Math.round(Math.random() * 100);
 	}
 	
-	public static void insertRandomData() {
+	public static User getUserData() {
+		String name = generateRandomString(7, 3);
+		return new User(
+				name,
+				name.substring(name.indexOf(".") + 1, 7),
+				name.substring(0, name.indexOf(".")),
+				getRandomAge(),
+				getRandomOccupation(),
+				getRandomCity(),
+				generateRandomString(10, 0)
+				);
+	}
+	
+	public static void insertUser() {
 		String name = generateRandomString(7, 3);
 		String firstName = name.substring(name.indexOf(".") + 1, 7);
 		String lastName = name.substring(0, name.indexOf("."));
@@ -103,7 +118,7 @@ public class Jdbc {
 		String address = getRandomCity();
 		String password = generateRandomString(10, 0);
 		
-		try (PreparedStatement preparedStatement = connection.prepareStatement(createUser, Statement.RETURN_GENERATED_KEYS)) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(createUserSql, Statement.RETURN_GENERATED_KEYS)) {
 			preparedStatement.setObject(1, name);
 			preparedStatement.setObject(2, firstName);
 			preparedStatement.setObject(3, lastName);
@@ -125,12 +140,12 @@ public class Jdbc {
 		}
 	}
 	
-	public static void updateUserInfo() {
+	public static void updateUser() {
 		int age = getRandomAge();
 		String address = getRandomCity();
 		String occupation = getRandomOccupation();
 		
-		try (PreparedStatement preparedStatement = connection.prepareStatement(updateUser, Statement.RETURN_GENERATED_KEYS)) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(updateUserSql, Statement.RETURN_GENERATED_KEYS)) {
 			preparedStatement.setObject(1, age);
 			preparedStatement.setObject(2, address);
 			preparedStatement.setObject(3, occupation);
@@ -151,6 +166,20 @@ public class Jdbc {
 			exp.printStackTrace();
 		}
 	}
+	
+	public static void deleteUser() {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(deleteUserSql)) {
+			preparedStatement.setObject(1, 12);
+			int n = preparedStatement.executeUpdate();
+			if (n == 1) {
+				System.out.println("Delete succeed!");
+			} else {
+				System.out.println("Failed delete. Affected rows: " + n);
+			}
+		} catch (SQLException exp) {
+			exp.printStackTrace();
+		}
+	}
 }
 
 class User {
@@ -162,4 +191,25 @@ class User {
 	int age;
 	String address;
 	String password;
+	
+	public User(String name, String first_name, String last_name, int age, String occupation, String address, String password) {
+		this.name = name;
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.age = age;
+		this.occupation = occupation;
+		this.address = address;
+		this.password = password;
+	}
+	
+	public User(long id, String name, String first_name, String last_name, int age, String occupation, String address, String password) {
+		this.id = id;
+		this.name = name;
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.age = age;
+		this.occupation = occupation;
+		this.address = address;
+		this.password = password;
+	}
 }
